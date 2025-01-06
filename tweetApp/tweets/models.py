@@ -16,7 +16,7 @@ class User(models.Model):
     phone_number = models.BigIntegerField()
     password = models.CharField(max_length=255)
     dob = models.DateField(default='')
-    profile_photo = CloudinaryField('peeptalks/profile_photo')
+    profile_photo = CloudinaryField('peeptalks/profile_photo',blank=True)
     gender = models.CharField(max_length=2,choices=GENDER_CHOICES,default='')
     createdAt = models.DateTimeField(default=timezone.now)
 
