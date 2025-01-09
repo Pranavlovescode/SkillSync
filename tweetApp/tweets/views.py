@@ -11,6 +11,60 @@ from django.contrib.auth.hashers import check_password
 
 # Create your views here.
 
+# Initial routes(login,register,logout)
+
+@api_view(['POST'])
+def login_view(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    try:
+        user = User.objects.get(email=email)
+        if check_password(password, user.password):
+            request.session['user_id'] = user.email
+            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    
+
+
+@api_view(['GET'])
+def logout_view(request):
+    request.session.flush()  # clear the session
+    return JsonResponse({"msg":"Logout successful"},status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def register_view(request):
+    try:
+        data = JSONParser().parse(request)
+        # print("Data received:", data)
+
+        serializer = UserSerializer(data=data)
+        # print("Serializer initialized:", serializer)
+
+        if serializer.is_valid():
+            # print("Serializer is valid")
+            saved_user = serializer.save()
+            # print("Saved user:", saved_user)
+
+            # Return response with the saved user data
+            return Response({'msg': "User Registered successfully", 'user': saved_user.email}, status=status.HTTP_201_CREATED)
+
+        # If serializer is not valid, return a bad request response
+        return JsonResponse({'msg': "Failed to create a user", 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        # Log the error to help debugging
+        print(f"Error: {e}")
+        return JsonResponse({'msg': "Something went wrong while creating a new user", 'error': str(e)}, status=500)
+
+
+
 @csrf_exempt
 def list_users(request):
     """
@@ -60,23 +114,3 @@ def update_or_delete_or_get_user_details(request,email):
         user.delete()
         return JsonResponse({"message":"User deleted successfully"},status=status.HTTP_204_NO_CONTENT)
 
-@api_view(['POST'])
-def login_view(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
-
-    try:
-        user = User.objects.get(email=email)
-        if check_password(password, user.password):
-            request.session['user_id'] = user.email
-            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-    except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
-
-
-@api_view(['GET'])
-def logout_view(request):
-    request.session.flush()  # clear the session
-    return JsonResponse({"msg":"Logout successful"},status=status.HTTP_200_OK)
