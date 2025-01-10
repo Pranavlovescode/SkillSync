@@ -24,7 +24,5 @@ from tweetApp import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/',include('tweets.urls')),
-    path('',views.first_view)
-
     
 ]
