@@ -55,7 +55,7 @@ def register_view(request):
             # print("Saved user:", saved_user)
 
             # Return response with the saved user data
-            return Response({'msg': "User Registered successfully", 'user': saved_user.email}, status=status.HTTP_201_CREATED)
+            return Response({'msg': "User Registered successfully", 'user': serializer.data}, status=status.HTTP_201_CREATED)
 
         # If serializer is not valid, return a bad request response
         return JsonResponse({'msg': "Failed to create a user", 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

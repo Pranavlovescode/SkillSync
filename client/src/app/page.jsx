@@ -41,17 +41,23 @@ export default function Home() {
       if (response.status == 200) {
         console.log("data", data);
         toast.success(data.message);
+        setIsLoading(false);
+        setFormData({
+          email: "",
+          password: "",
+        });
       } else {
         toast.error(data.message);
+        setIsLoading(false);
+        setFormData({
+          email: "",
+          password: "",
+        });
       }
     } catch (error) {
       console.log("error", error);
       toast.error("An error occured while trying to login");
       setIsLoading(false);
-      setFormData({
-        email: "",
-        password: "",
-      });
     }
   };
 
