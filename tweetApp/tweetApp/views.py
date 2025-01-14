@@ -3,5 +3,8 @@ from django.http import HttpResponse
 
 # Custom views goes here
 
-def first_view(request):
-    return render(request,'index.html')
+def login_view(request):
+    return render(request,'login.html') 
+
+def signup_view(request):
+    return render(request,'signup.html')
