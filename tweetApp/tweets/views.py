@@ -20,12 +20,14 @@ def login_view(request):
 
     try:
         user = User.objects.get(email=email)
+        serialzer  = UserSerializer(user)
+        print('user',serialzer.data)
         if check_password(password, user.password):
             request.session['user_id'] = user.email
-            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Login successful',"user":serialzer.data}, status=status.HTTP_200_OK)
+        return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
     except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     
 
     

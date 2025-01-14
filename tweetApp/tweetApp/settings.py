@@ -40,7 +40,13 @@ SECRET_KEY = "django-insecure-3fy))#ol2l^gcr@7wfb24_1&g=x$o7d6i($4ydpk9^^k!$fdhl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+]
 
 
 # Application definition
@@ -55,7 +61,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'tweets',
     'cloudinary',
-    'cloudinary_storage'
+    'cloudinary_storage',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +73,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "tweetApp.urls"
