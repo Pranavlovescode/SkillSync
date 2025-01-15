@@ -11,8 +11,10 @@ class User(models.Model):
     }
 
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100)
+    username = models.CharField(max_length=100,unique=True)
     phone_number = models.BigIntegerField(default=0000000000)
     password = models.CharField(max_length=255,default='')
     dob = models.DateField(default='1999-1-1')

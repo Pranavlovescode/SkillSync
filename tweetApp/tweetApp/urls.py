@@ -20,12 +20,13 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from tweetApp import views
-from .views import login_view,signup_view
+from .views import login_view,signup_view,tweet_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/',include('tweets.urls')),
     path('',login_view,name="login"),
-    path('signup/',signup_view,name="signup")
+    path('signup/',signup_view,name="signup"),
+    path('tweet/',views.tweet_view,name="tweet"),
     
 ]
