@@ -14,8 +14,11 @@ def login_view(request):
         password = request.POST.get('password')
         print(username_or_email,password)
         logger.debug(f'User: {request.user}')  # Log the user object
+        
         form = LoginForm(request.POST)
+
         custom_backend = EmailBackend()
+
         if form.is_valid():
             user = custom_backend.authenticate(request=request,username_or_email=username_or_email,password=password)
             print(f"User: {user}")
@@ -23,7 +26,7 @@ def login_view(request):
                 request.session['user']=user.email
                 return HttpResponseRedirect('/tweet/')
             else:
-                return HttpResponse('Invalid credentials')
+                form.add_error(None,'Invalid credentials')
     else:
         form = LoginForm()
     return render(request,'login.html',{'form':form})
