@@ -1,0 +1,26 @@
+<!-- index.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PeepTalk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <!-- Check if this shows up -->
+    {% block login_form %}
+    <!-- Default content for login_form block -->
+    {% endblock %}
+
+
+    <!-- Check if this shows up -->
+    {% block signup_form %}
+    <!-- Default content for signup_form block -->
+    {% endblock %}
+
+    {% block tweet %}{% endblock %}
+    <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!-- login.html -->
+{% extends "index.html" %} {% block login_form %}
+<div class="min-h-screen w-full flex">
+  <!-- Left Section - Hero/Branding -->
+  <div
+    class="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 p-12 relative"
+  >
+    <div
+      class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579548122080-c35fd6820ecb')] opacity-20 bg-cover bg-center"
+    ></div>
+    <div class="relative z-10 flex flex-col justify-center">
+      <svg
+        class="h-20 w-20 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+        />
+      </svg>
+      <h1 class="text-5xl font-bold text-white mb-6">Welcome back</h1>
+      <p class="text-xl text-white/90 max-w-md">
+        Connect with your friends, share moments, and stay updated with what's
+        happening in your world.
+      </p>
+    </div>
+  </div>
+
+  <!-- Right Section - Login Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-xl p-8">
+      <div class="text-center mb-8">
+        <div
+          class="lg:hidden w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="h-6 w-6 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">
+          Sign in to PeepTalk
+        </h2>
+        <p class="text-gray-500">Enter your account details</p>
+      </div>
+
+      <form class="space-y-6" method="POST">
+        {% csrf_token %}
+        <!-- Email or Username -->
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Email or username
+          </label>
+          <input
+            type="text"
+            id="email"
+            name="username_or_email"
+            placeholder="Username or Email"
+            class="w-full h-12 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="w-full h-12 px-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+          />
+        </div>
+
+        <!-- Remember Me and Forgot Password -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="remember"
+              name="remember"
+              class="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label for="remember" class="ml-2 text-sm text-gray-600">
+              Remember me
+            </label>
+          </div>
+          <a href="#" class="text-sm text-blue-500 hover:underline"
+            >Forgot password?</a
+          >
+        </div>
+
+        <!-- Sign In Button -->
+        <button
+          type="submit"
+          class="w-full h-12 bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg transition-colors"
+        >
+          Sign in
+        </button>
+
+        {% if form.non_field_errors %}
+        <div class="text-red-500 text-sm">
+          {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Signup Redirect -->
+        <div class="text-sm text-center text-gray-600">
+          Don't have an account?
+          <a href="/signup" class="text-blue-500 hover:underline">Sign up</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
