@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from .forms import LoginForm,SignUpForm
 from tweets.models import User
-from django.contrib.auth import authenticate,login,logout
+from .backends import EmailBackend
+import logging
+logger = logging.getLogger(__name__)
 
 # Custom views goes here
 
@@ -11,14 +13,16 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         print(username,password)
+        logger.debug(f'User: {request.user}')  # Log the user object
         form = LoginForm(request.POST)
+        custom_backend = EmailBackend()
         if form.is_valid():
-            user = authenticate(username=username,password=password)
-            if user:
-                login(request,user)
+            user = custom_backend.authenticate(request=request,username=username,password=password)
+            print(f"User: {user}")
+            if user:                
                 return HttpResponseRedirect('/tweet/')
             else:
-                return HttpResponseRedirect('/')
+                return HttpResponse('Invalid credentials')
     else:
         form = LoginForm()
     return render(request,'login.html',{'form':form})

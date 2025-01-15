@@ -81,6 +81,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session after browser closes
 # }
 
 
+AUTH_BACKEND = ['tweetApp.backends.EmailAuthBackend','django.contrib.auth.backends.ModelBackend']
+
+
 
 MEDIA_URL='/profile_photo/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
