@@ -10,16 +10,17 @@ logger = logging.getLogger(__name__)
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username_or_email = request.POST.get('username_or_email')
         password = request.POST.get('password')
-        print(username,password)
+        print(username_or_email,password)
         logger.debug(f'User: {request.user}')  # Log the user object
         form = LoginForm(request.POST)
         custom_backend = EmailBackend()
         if form.is_valid():
-            user = custom_backend.authenticate(request=request,username=username,password=password)
+            user = custom_backend.authenticate(request=request,username_or_email=username_or_email,password=password)
             print(f"User: {user}")
-            if user:                
+            if user:      
+                request.session['user']=user.email
                 return HttpResponseRedirect('/tweet/')
             else:
                 return HttpResponse('Invalid credentials')
