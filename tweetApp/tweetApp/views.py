@@ -50,5 +50,5 @@ def signup_view(request):
 
     return render(request,'signup.html',{'form':form})
 
-def tweet_view(request):
-    return render(request,'tweet.html')
+# def tweet_view(request):
+#     return render(request,'tweet.html')
