@@ -21,5 +21,6 @@ class User(models.Model):
     profile_photo = CloudinaryField('peeptalks/profile_photo',blank=True)
     gender = models.CharField(max_length=2,choices=GENDER_CHOICES,default='')
     createdAt = models.DateTimeField(default=timezone.now)
+    bio = models.TextField(default='',max_length=500)
 
 
