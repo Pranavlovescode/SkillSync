@@ -40,7 +40,9 @@ SECRET_KEY = "django-insecure-3fy))#ol2l^gcr@7wfb24_1&g=x$o7d6i($4ydpk9^^k!$fdhl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    
+]
 
 
 # Application definition
@@ -55,7 +57,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'tweets',
     'cloudinary',
-    'cloudinary_storage'
+    'cloudinary_storage',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +87,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session after browser closes
 
 AUTH_BACKEND = ['tweetApp.backends.EmailAuthBackend','django.contrib.auth.backends.ModelBackend']
 
+LOGIN_URL = '/'
 
 
 MEDIA_URL='/profile_photo/'
@@ -104,6 +108,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = "tweetApp.wsgi.application"
 
@@ -168,6 +174,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

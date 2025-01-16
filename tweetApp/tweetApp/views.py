@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect,HttpResponse
+from django.contrib.auth.hashers import make_password 
 from .forms import LoginForm,SignUpForm
 from tweets.models import User
 from .backends import EmailBackend
@@ -40,9 +41,10 @@ def signup_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         print(first_name,last_name,email,username,password)
+        hash_password = make_password(password)
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = User(first_name=first_name,last_name=last_name,email=email,username=username,password=password)
+            user = User(first_name=first_name,last_name=last_name,email=email,username=username,password=hash_password)
             user.save()
             return HttpResponseRedirect('/tweet')
     else:
@@ -50,5 +52,5 @@ def signup_view(request):
 
     return render(request,'signup.html',{'form':form})
 
-def tweet_view(request):
-    return render(request,'tweet.html')
+# def tweet_view(request):
+#     return render(request,'tweet.html')

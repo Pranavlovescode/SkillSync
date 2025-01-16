@@ -7,20 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PeepTalk</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'script.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
   </head>
   <body>
-    <!-- Check if this shows up -->
-    {% block login_form %}
-    <!-- Default content for login_form block -->
-    {% endblock %}
 
+    {% block login_form %}{% endblock %}
 
-    <!-- Check if this shows up -->
-    {% block signup_form %}
-    <!-- Default content for signup_form block -->
-    {% endblock %}
+    {% block signup_form %}{% endblock %}
+
+    {% block navbar %}{% endblock %}
 
     {% block tweet %}{% endblock %}
+
+    {% block profile %}{% endblock %}
+
+    {% block editProfile %}{% endblock %}
+
     <script src="{% static 'script.js' %}"></script>
   </body>
 </html>
