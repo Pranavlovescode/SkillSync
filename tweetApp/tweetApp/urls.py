@@ -27,5 +27,6 @@ urlpatterns = [
     path('tweet/',include('tweets.urls')),
     path('',login_view,name="login"),
     path('signup/',signup_view,name="signup"),
+    path('logout/',views.logout_view,name="logout"),
     
 ]

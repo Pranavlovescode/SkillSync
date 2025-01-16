@@ -24,3 +24,4 @@ class User(models.Model):
     bio = models.TextField(default='',max_length=500)
 
 
+    

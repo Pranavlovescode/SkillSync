@@ -6,11 +6,22 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 def tweet_view(request):
-    return render(request, 'tweet.html')
+    session = request.session.get('user')
+    if not session:
+        return redirect('login')
+    else:
+        user = User.objects.get(email=session)
+        return render(request, 'tweet.html',{'user': user})
 
 
 def profile_view(request):
-    return render(request, 'profile.html')
+    session = request.session.get('user')
+    if not session:
+        return redirect('login')
+    else:
+        user = User.objects.get(email=session)
+        return render(request, 'profile.html', {'user': user})
+
 
 
 def edit_profile_view(request):
