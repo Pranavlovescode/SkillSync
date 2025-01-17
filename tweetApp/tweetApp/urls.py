@@ -24,8 +24,9 @@ from .views import login_view,signup_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('tweet/',include('tweets.urls')),
+    path('skill/',include('tweets.urls')),
     path('',login_view,name="login"),
     path('signup/',signup_view,name="signup"),
+    path('logout/',views.logout_view,name="logout"),
     
 ]

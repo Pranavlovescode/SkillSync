@@ -8,14 +8,14 @@
     <div class="h-48 bg-gray-300"></div>
     <div class="p-6">
       <img
-        src="/placeholder.svg?height=120&width=120"
+        src="{{user.profile_photo.url}}"
         alt="Profile Picture"
         class="w-32 h-32 rounded-full border-4 border-white -mt-20 mb-4"
       />
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-2xl font-bold">John Doe</h2>
-          <p class="text-gray-600">@johndoe</p>
+          <h2 class="text-2xl font-bold">{{user.first_name}} {{user.last_name}}</h2>
+          <p class="text-gray-600">@{{user.username}}</p>
         </div>
         <a href="view/" class="text-blue-500 hover:text-blue-700 duration-300">
           <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>
@@ -23,8 +23,7 @@
         </a>
       </div>
       <p class="mt-2">
-        Web developer, coffee enthusiast, and amateur photographer. Tweeting
-        about tech, life, and everything in between.
+        {{user.bio}}
       </p>
       <div class="flex space-x-4 mt-4">
         <span><strong>1,234</strong> Following</span>

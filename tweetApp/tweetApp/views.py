@@ -52,5 +52,6 @@ def signup_view(request):
 
     return render(request,'signup.html',{'form':form})
 
-# def tweet_view(request):
-#     return render(request,'tweet.html')
+def logout_view(request):
+    request.session.flush()
+    return HttpResponseRedirect('/')
