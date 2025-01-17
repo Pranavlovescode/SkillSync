@@ -16,7 +16,7 @@ class CustomMiddleware:
             return HttpResponseRedirect('/')
         elif request.path in open_urls and session:
             print("Redirecting to tweet page")
-            return HttpResponseRedirect('/tweet/')
+            return HttpResponseRedirect('/skill/')
             
         response = self.get_response(request)
         return response

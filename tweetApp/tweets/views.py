@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from tweets.models import User
+from tweets.models import User,SkillPost
 from tweets.forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -11,7 +11,8 @@ def tweet_view(request):
         return redirect('login')
     else:
         user = User.objects.get(email=session)
-        return render(request, 'tweet.html',{'user': user})
+        skill = SkillPost.objects.all()
+        return render(request, 'tweet.html', {'user': user, 'skill': skill})
 
 
 def profile_view(request):

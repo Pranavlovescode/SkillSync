@@ -5,5 +5,26 @@
 {% endblock %}
 
 {% block tweet %}
-    <p class="mt-4">This is tweet route</p>
+    <main class="container mx-auto mt-10 px-4">
+        {% for skill in skill %}
+        
+            <div class="bg-white p-4 rounded-md mx-auto my-4 w-full md:w-1/2">
+                <div class="flex items-center justify-between py-4">
+                    <div class="flex items-center">
+                        <img src="{{skill.post_owner.profile_photo.url}}" alt="{{skill.post_owner.user_id}}" class="w-10 h-10 rounded-full">
+                        <div class="ml-4 flex flex-col">
+                            <h2 class="text-xl font-bold">{{skill.post_owner.first_name}} {{skill.post_owner.last_name}}</h2>
+                            <p class="text-foreground text-sm text-gray-600">{{user.username}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="py-2">{{skill.post_description}}</p>
+                    <span class="bg-blue-500 text-white rounded-xl p-[5px]">{{skill.post_tags}}</span>
+                    <img src="{{skill.post_media.url}}" alt="post_media" class="w-full h-auto object-cover mt-4 rounded-md">
+                </div>            
+            </div>       
+        
+        {% endfor %}
+    </main>
 {% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from tweets.models import User
+from tweets.models import User,SkillPost
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -16,3 +16,6 @@ class ProfileForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class':'form-control'}),
             'gender': forms.Select(attrs={'class':'form-control'}),
         }
+
+        # model = SkillPost
+        # fields = ['post_name','post_description','post_media','post_tags']
