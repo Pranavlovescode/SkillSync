@@ -6,6 +6,21 @@
 
 {% block tweet %}
     <main class="container mx-auto mt-10 px-4">
+
+        <div>
+            <div class="bg-white rounded-md md:w-1/2 mx-auto p-4">
+                <div class="flex items-center justify-between">
+                    <a href="/skill/profile/">
+                        <img src="{{user.profile_photo.url}}" alt="{{user.username}}" class="w-10 h-10 rounded-full">
+                    </a>
+                    <h2 class="text-blue-500 text-2xl font-semibold">Create a new Skill post {{user.first_name}}!</h2>
+                    <a href="/skill/post/">
+                        <button class='bg-blue-500 p-3 rounded-full text-white hover:bg-blue-700 duration-500'>Create Post</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         {% for skill in skill %}
         
             <div class="bg-white p-4 rounded-md mx-auto my-4 w-full md:w-1/2">
@@ -21,6 +36,7 @@
                 <div>
                     <p class="py-2">{{skill.post_description}}</p>
                     <span class="bg-blue-500 text-white rounded-xl p-[5px]">{{skill.post_tags}}</span>
+                    
                     <img src="{{skill.post_media.url}}" alt="post_media" class="w-full h-auto object-cover mt-4 rounded-md">
                 </div>            
             </div>       

@@ -17,5 +17,13 @@ class ProfileForm(forms.ModelForm):
             'gender': forms.Select(attrs={'class':'form-control'}),
         }
 
-        # model = SkillPost
-        # fields = ['post_name','post_description','post_media','post_tags']
+class SkillPostForm(forms.ModelForm):
+    class Meta:
+        model = SkillPost
+        fields = ['post_name','post_description','post_media','post_tags']
+        widgets = {
+            'post_name': forms.TextInput(attrs={'class':'form-control'}),
+            'post_description': forms.Textarea(attrs={'class':'form-control'}),
+            'post_media': forms.FileInput(attrs={'class':'form-control'}),
+            'post_tags': forms.TextInput(attrs={'class':'form-control'}),
+        }

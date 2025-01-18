@@ -25,7 +25,7 @@ def login_view(request):
             print(f"User: {user}")
             if user:      
                 request.session['user']=user.email
-                return HttpResponseRedirect('/tweet/')
+                return HttpResponseRedirect('/skill/')
             else:
                 form.add_error(None,'Invalid credentials')
     else:
@@ -46,7 +46,7 @@ def signup_view(request):
         if form.is_valid():
             user = User(first_name=first_name,last_name=last_name,email=email,username=username,password=hash_password)
             user.save()
-            return HttpResponseRedirect('/tweet')
+            return HttpResponseRedirect('/skill/')
     else:
         form = SignUpForm()
 

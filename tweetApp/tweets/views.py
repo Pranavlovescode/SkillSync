@@ -1,18 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from tweets.models import User,SkillPost
-from tweets.forms import ProfileForm
+from tweets.forms import ProfileForm,SkillPostForm
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-def tweet_view(request):
-    session = request.session.get('user')
-    if not session:
-        return redirect('login')
-    else:
-        user = User.objects.get(email=session)
-        skill = SkillPost.objects.all()
-        return render(request, 'tweet.html', {'user': user, 'skill': skill})
 
 
 def profile_view(request):
@@ -60,3 +52,45 @@ def edit_profile_view(request):
         'form': form,
         'user': user,
     })
+
+
+
+
+# View for displaying all posts
+def tweet_view(request):
+    session = request.session.get('user')
+    if not session:
+        return redirect('login')
+    else:
+        user = User.objects.get(email=session)
+        skill = SkillPost.objects.all()
+        return render(request, 'tweet.html', {'user': user, 'skill': skill})
+
+
+
+# View for making a new post
+def create_new_post(request):
+    try:
+        session = request.session.get('user')
+        if not session:
+            return redirect('login')
+        else:
+            user = User.objects.get(email=session)
+            if request.method == "POST":
+                post_form = SkillPostForm(request.POST,request.FILES)
+
+                if post_form.is_valid():
+
+                    skill_post = post_form.save(commit=False)
+                    skill_post.post_owner = user
+                    skill_post.save()
+
+                    return render(request,'skillPost.html',{'post_form':post_form,'message':'Post created successfully'})
+                else:
+                    return render(request,'skillPost.html',{'post_form':post_form,'error':'Please correct the errors below'})
+            else:
+                post_form = SkillPostForm()
+                return render(request,'skillPost.html',{'post_form':post_form,'user':user})
+    except User.DoesNotExist:
+        return redirect('login')
+
