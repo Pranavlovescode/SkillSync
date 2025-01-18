@@ -13,7 +13,8 @@ def profile_view(request):
         return redirect('login')
     else:
         user = User.objects.get(email=session)
-        return render(request, 'profile.html', {'user': user})
+        post = SkillPost.objects.filter(post_owner=user)
+        return render(request, 'profile.html', {'user': user,'skill':post})
 
 
 
@@ -64,7 +65,7 @@ def tweet_view(request):
     else:
         user = User.objects.get(email=session)
         skill = SkillPost.objects.all()
-        return render(request, 'tweet.html', {'user': user, 'skill': skill})
+        return render(request, 'skill.html', {'user': user, 'skill': skill})
 
 
 
