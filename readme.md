@@ -1,4 +1,4 @@
-# Django Tweet App
+# Django Skill App
 
 A simple tweet app built with Django to handle user authentication, tweet creation, and management.
 
