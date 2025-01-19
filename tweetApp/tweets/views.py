@@ -78,17 +78,18 @@ def create_new_post(request):
         else:
             user = User.objects.get(email=session)
             if request.method == "POST":
+                # print(request.POST)
                 post_form = SkillPostForm(request.POST,request.FILES)
-
+                # print(post_form)
                 if post_form.is_valid():
-
+                    print(post_form)
                     skill_post = post_form.save(commit=False)
                     skill_post.post_owner = user
                     skill_post.save()
 
-                    return render(request,'skillPost.html',{'post_form':post_form,'message':'Post created successfully'})
+                    return render(request,'skillPost.html',{'post_form':post_form,'user':user,'message':'Post created successfully'})
                 else:
-                    return render(request,'skillPost.html',{'post_form':post_form,'error':'Please correct the errors below'})
+                    return render(request,'skillPost.html',{'post_form':post_form,'user':user,'error':'Please correct the errors below'})
             else:
                 post_form = SkillPostForm()
                 return render(request,'skillPost.html',{'post_form':post_form,'user':user})

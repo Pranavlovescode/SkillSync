@@ -60,6 +60,9 @@
                 {% if message %}
                     <p class="text-green-500" id="message">{{message}}</p>
                 {% endif %}
+                {% if error %}
+                    <p class="text-red-500" id="message">{{error}}</p>
+                {% endif %}
             </div>
         </form>
     </div>

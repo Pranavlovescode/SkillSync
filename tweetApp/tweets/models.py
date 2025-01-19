@@ -28,7 +28,7 @@ class SkillPost(models.Model):
 
     post_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     post_name = models.CharField(max_length=500)
-    post_description = models.TextField(max_length=1000)
+    post_description = models.TextField(max_length=10000)
     post_media = CloudinaryField(folder="SkillSync/post_media",blank=True)
     post_tags = models.CharField(max_length=100,blank=True)
     post_owner = models.ForeignKey(User,on_delete=models.CASCADE)
