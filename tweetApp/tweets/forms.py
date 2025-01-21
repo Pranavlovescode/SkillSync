@@ -26,4 +26,5 @@ class SkillPostForm(forms.ModelForm):
             'post_description': forms.Textarea(attrs={'class':'form-control'}),
             'post_media': forms.FileInput(attrs={'class':'form-control'}),
             'post_tags': forms.TextInput(attrs={'class':'form-control'}),
+
         }

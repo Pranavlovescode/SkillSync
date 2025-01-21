@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from tweets.models import User,SkillPost
 from tweets.forms import ProfileForm,SkillPostForm
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,7 @@ def profile_view(request):
         return redirect('login')
     else:
         user = User.objects.get(email=session)
-        post = SkillPost.objects.filter(post_owner=user)
+        post = SkillPost.objects.filter(post_owner=user)        
         return render(request, 'profile.html', {'user': user,'skill':post})
 
 
@@ -65,6 +65,11 @@ def tweet_view(request):
     else:
         user = User.objects.get(email=session)
         skill = SkillPost.objects.all()
+        if request.method == "POST":
+            post = get_object_or_404(SkillPost, post_id=request.POST.get('post_id'))
+            print(f"Post likes: {post.post_likes}")
+            post.post_likes += 1
+            post.save()
         return render(request, 'skill.html', {'user': user, 'skill': skill})
 
 

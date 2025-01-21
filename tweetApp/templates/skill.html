@@ -38,6 +38,28 @@
                     <span class="bg-blue-500 text-white rounded-xl p-[5px]">{{skill.post_tags}}</span>
                     
                     <img src="{{skill.post_media.url}}" alt="post_media" class="w-full h-auto object-cover mt-4 rounded-md">
+                    <div class="mt-4 flex space-x-4 text-gray-500">
+                        <form method="POST" class="flex items-center space-x-1 hover:text-blue-500">
+                            {% csrf_token %}
+                            <span>{{skill.post_likes}}</span>
+                            <input type="hidden" name="post_id" value="{{ skill.post_id }}">
+                            <button class="flex items-center space-x-1 hover:text-red-500" name="{{skill.post_id}}">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                                <span>Like</span>                                
+                            </button>
+                        </form>
+                    </div>
                 </div>            
             </div>       
         

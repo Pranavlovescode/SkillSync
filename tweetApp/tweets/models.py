@@ -32,6 +32,7 @@ class SkillPost(models.Model):
     post_media = CloudinaryField(folder="SkillSync/post_media",blank=True)
     post_tags = models.CharField(max_length=100,blank=True)
     post_owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    post_likes = models.IntegerField(default=0)
     createdAt = models.DateTimeField(default=timezone.now)
 
 
