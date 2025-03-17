@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 
 export default function Home() {
   const [formData, setFormData] = useState({
-    email: "",
+    username_or_email: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -35,22 +35,25 @@ export default function Home() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
       const data = response.data;
       if (response.status == 200) {
         console.log("data", data);
         toast.success(data.message);
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("user", data.user);
         setIsLoading(false);
         setFormData({
-          email: "",
+          username_or_email: "",
           password: "",
         });
       } else {
         toast.error(data.message);
         setIsLoading(false);
         setFormData({
-          email: "",
+          username_or_email: "",
           password: "",
         });
       }
@@ -94,16 +97,16 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email or Username</Label>
                 <Input
                   id="email"
-                  type="email"
+                  type="text"
                   placeholder="john@example.com"
                   className="h-12"
-                  name="email"
-                  value={formData.email}
+                  name="username_or_email"
+                  value={formData.username_or_email}
                   onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
+                    setFormData({ ...formData, username_or_email: e.target.value })
                   }
                 />
               </div>

@@ -16,17 +16,28 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from tweetApp import views
-from .views import login_view,signup_view
+from .views import login_api, signup_api, logout_api
+from rest_framework.authtoken import views as rest_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('skill/',include('tweets.urls')),
-    path('',login_view,name="login"),
-    path('signup/',signup_view,name="signup"),
-    path('logout/',views.logout_view,name="logout"),
+    path('skill/', include('tweets.urls')),
     
+    # Root URL - use the login API
+    path('', login_api, name="home"),
+    
+    # REST API endpoints
+    path('api/login/', login_api, name="api_login"),
+    path('api/signup/', signup_api, name="api_signup"),
+    path('api/logout/', logout_api, name="api_logout"),
+    
+    # Token authentication endpoint
+    path('api/token-auth/', rest_views.obtain_auth_token, name='api_token_auth'),
 ]
+
+# Add static URL configuration
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

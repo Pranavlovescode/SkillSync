@@ -14,10 +14,12 @@ import { Label } from "@/components/ui/label";
 import { TwitterIcon, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Link from "next/link";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     username: "",
     email: "",
     password: "",
@@ -32,9 +34,10 @@ export default function Signup() {
     try {
       if (formData.password == formData.confirmPassword) {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/register/`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/signup/`,
           {
-            name: formData.name,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
             username: formData.username,
             email: formData.email,
             password: formData.password,
@@ -47,9 +50,10 @@ export default function Signup() {
         );
         if (response.status == 201) {
           console.log("data", response.data);
-          toast.success(response.data.msg);
+          toast.success(response.data.message);
           setFormData({
-            name: "",
+            first_name: "",
+            last_name: "",
             username: "",
             email: "",
             password: "",
@@ -76,7 +80,7 @@ export default function Signup() {
         <div className="relative z-10 flex flex-col justify-center">
           <TwitterIcon className="h-20 w-20 text-white mb-8" />
           <h1 className="text-5xl font-bold text-white mb-6">
-            Join PeepTalk today
+            Join SkillSync today
           </h1>
           <p className="text-xl text-white/90 max-w-md">
             Share your thoughts, follow your interests, and be part of the
@@ -102,15 +106,28 @@ export default function Signup() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">First Name</Label>
                 <Input
-                  id="firstName"
-                  placeholder="John Doe"
-                  name="name"
+                  id="first_name"
+                  placeholder="John"
+                  name="first_name"
                   className="h-12"
-                  value={formData.name}
+                  value={formData.first_name}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, first_name: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Last Name</Label>
+                <Input
+                  id="last_name"
+                  placeholder="Doe"
+                  name="last_name"
+                  className="h-12"
+                  value={formData.last_name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, last_name: e.target.value })
                   }
                 />
               </div>
@@ -202,9 +219,9 @@ export default function Signup() {
               </Button>
               <div className="text-sm text-center text-gray-600">
                 Already have an account?{" "}
-                <a href="#" className="text-blue-500 hover:underline">
+                <Link href={'/'} className="text-blue-500 hover:underline">
                   Sign in
-                </a>
+                </Link>
               </div>
             </CardFooter>
           </Card>
