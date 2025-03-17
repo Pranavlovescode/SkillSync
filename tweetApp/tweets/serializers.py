@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, SkillPost
+from .models import User, SkillPost, SkillCategory, Skill, SkillEndorsement
 from django.contrib.auth.hashers import make_password, check_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,3 +46,56 @@ class SkillPostSerializer(serializers.ModelSerializer):
             'post_likes', 'createdAt'
         ]
         read_only_fields = ['post_id', 'createdAt']
+
+class SkillCategorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for SkillCategory model
+    """
+    class Meta:
+        model = SkillCategory
+        fields = ['id', 'name', 'description', 'icon', 'created_at']
+
+class SkillEndorsementSerializer(serializers.ModelSerializer):
+    """
+    Serializer for SkillEndorsement model
+    """
+    endorsed_by = UserSerializer(read_only=True)
+    
+    class Meta:
+        model = SkillEndorsement
+        fields = ['id', 'endorsed_by', 'created_at']
+
+class SkillSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Skill model
+    """
+    category = SkillCategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=SkillCategory.objects.all(),
+        source='category',
+        write_only=True
+    )
+    user = UserSerializer(read_only=True)
+    endorsements_count = serializers.SerializerMethodField()
+    endorsements = SkillEndorsementSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Skill
+        fields = [
+            'id', 'name', 'description', 'level', 
+            'category', 'category_id', 'user', 
+            'created_at', 'endorsements_count', 'endorsements'
+        ]
+    
+    def get_endorsements_count(self, obj):
+        return obj.endorsements.count()
+
+class SkillCategoryWithSkillsSerializer(serializers.ModelSerializer):
+    """
+    Serializer for SkillCategory model with related skills
+    """
+    skills = SkillSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = SkillCategory
+        fields = ['id', 'name', 'description', 'icon', 'created_at', 'skills']

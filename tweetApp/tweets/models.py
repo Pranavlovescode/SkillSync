@@ -36,3 +36,62 @@ class SkillPost(models.Model):
     createdAt = models.DateTimeField(default=timezone.now)
 
 
+class SkillCategory(models.Model):
+    """
+    Model for skill categories (e.g., Programming Languages, Web Development, etc.)
+    """
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    icon = models.CharField(max_length=50, blank=True)  # For storing icon name/class
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Skill Categories"
+
+
+class Skill(models.Model):
+    """
+    Model for individual skills
+    """
+    LEVEL_CHOICES = (
+        ('Beginner', 'Beginner'),
+        ('Intermediate', 'Intermediate'),
+        ('Advanced', 'Advanced'),
+        ('Expert', 'Expert'),
+    )
+    
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='Beginner')
+    category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE, related_name='skills')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='skills')
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f"{self.name} ({self.level})"
+    
+    class Meta:
+        unique_together = ('name', 'user')  # A user can't have the same skill twice
+
+
+class SkillEndorsement(models.Model):
+    """
+    Model for skill endorsements
+    """
+    id = models.AutoField(primary_key=True)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='endorsements')
+    endorsed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='endorsements_given')
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f"{self.endorsed_by.username} endorsed {self.skill.name}"
+    
+    class Meta:
+        unique_together = ('skill', 'endorsed_by')  # A user can endorse a skill only once
+
+

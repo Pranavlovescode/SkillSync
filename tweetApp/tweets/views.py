@@ -1,8 +1,14 @@
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
-from .models import User, SkillPost
-from .serializers import UserSerializer, SkillPostSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.shortcuts import get_object_or_404
+from .models import User, SkillPost, SkillCategory, Skill, SkillEndorsement
+from .serializers import (
+    UserSerializer, SkillPostSerializer, 
+    SkillCategorySerializer, SkillSerializer, 
+    SkillEndorsementSerializer, SkillCategoryWithSkillsSerializer
+)
 
 # Traditional view functions
 from django.shortcuts import render, redirect
@@ -257,4 +263,99 @@ def create_new_post(request):
     return JsonResponse({
         'pageTitle': 'Create New Post',
         'isAuthenticated': True
-    }) 
+    })
+
+# Skill Category ViewSet
+class SkillCategoryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for skill categories
+    """
+    queryset = SkillCategory.objects.all()
+    serializer_class = SkillCategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve' or self.action == 'list':
+            return SkillCategoryWithSkillsSerializer
+        return SkillCategorySerializer
+
+
+# Skill ViewSet
+class SkillViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for skills
+    """
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        queryset = Skill.objects.all()
+        
+        # Filter by category if provided
+        category_id = self.request.query_params.get('category')
+        if category_id:
+            queryset = queryset.filter(category_id=category_id)
+        
+        # Filter by user if provided
+        user_id = self.request.query_params.get('user')
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+        
+        # Filter by level if provided
+        level = self.request.query_params.get('level')
+        if level:
+            queryset = queryset.filter(level=level)
+        
+        return queryset
+    
+    def perform_create(self, serializer):
+        # Set the user to the current authenticated user
+        serializer.save(user=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def endorse(self, request, pk=None):
+        """
+        Endpoint for endorsing a skill
+        """
+        skill = self.get_object()
+        user = request.user
+        
+        # Check if the user has already endorsed this skill
+        if SkillEndorsement.objects.filter(skill=skill, endorsed_by=user).exists():
+            return Response(
+                {'detail': 'You have already endorsed this skill.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create the endorsement
+        endorsement = SkillEndorsement.objects.create(
+            skill=skill,
+            endorsed_by=user
+        )
+        
+        serializer = SkillEndorsementSerializer(endorsement)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_user_skills(request, username):
+    """
+    Get all skills for a specific user
+    """
+    user = get_object_or_404(User, username=username)
+    skills = Skill.objects.filter(user=user)
+    serializer = SkillSerializer(skills, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_skill_categories_with_skills(request):
+    """
+    Get all skill categories with their related skills
+    """
+    categories = SkillCategory.objects.all()
+    serializer = SkillCategoryWithSkillsSerializer(categories, many=True)
+    return Response(serializer.data) 
