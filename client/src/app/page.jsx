@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { TwitterIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -22,6 +23,7 @@ export default function Home() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useRouter();
 
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -49,6 +51,7 @@ export default function Home() {
           username_or_email: "",
           password: "",
         });
+        navigate.push('/skills')
       } else {
         toast.error(data.message);
         setIsLoading(false);

@@ -43,7 +43,7 @@ export default function SkillsLayout({ children }) {
       <main>{children}</main>
       
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-6 mt-12">
+      <footer className="bg-white border-t border-gray-200 py-6 mt-20">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
