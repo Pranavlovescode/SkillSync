@@ -28,7 +28,23 @@ api.interceptors.request.use(
 );
 
 // Skills API endpoints
-export const skillsApi = {
+export const skillSyncApi = {
+
+  // login API
+  loginApi: async (credentials) => {
+    try {
+      const response = await api.post("/api/login/", credentials);
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      return response;
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    }
+  },
+
+
   // Get all skills
   getAllSkills: async () => {
     try {
@@ -54,7 +70,7 @@ export const skillsApi = {
   // Add a new skill
   addSkill: async (skillData) => {
     try {
-      const response = await api.post("/api/skills/", skillData);
+      const response = await api.post("/skill/post/", skillData);
       return response.data;
     } catch (error) {
       console.error("Error adding skill:", error);

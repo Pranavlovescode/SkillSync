@@ -40,7 +40,7 @@ class SkillCategory(models.Model):
     """
     Model for skill categories (e.g., Programming Languages, Web Development, etc.)
     """
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=50, blank=True)  # For storing icon name/class
@@ -64,7 +64,7 @@ class Skill(models.Model):
         ('Expert', 'Expert'),
     )
     
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='Beginner')
@@ -83,7 +83,7 @@ class SkillEndorsement(models.Model):
     """
     Model for skill endorsements
     """
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='endorsements')
     endorsed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='endorsements_given')
     created_at = models.DateTimeField(default=timezone.now)

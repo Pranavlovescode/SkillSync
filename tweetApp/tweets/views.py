@@ -206,12 +206,15 @@ def edit_profile_view(request):
         'user': serializer.data
     })
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_new_post(request):
     """
     View for creating a new skill post with JSON responses
     """
     user_email = request.session.get('user')
     if not user_email:
+        print("user_email",user_email)
         return JsonResponse({
             'success': False,
             'error': 'Not authenticated',

@@ -9,13 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import axios from "axios";
+import { Label } from "@/components/ui/label";  
 import { TwitterIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { skillSyncApi } from "@/lib/api";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -30,28 +30,29 @@ export default function Home() {
     e.preventDefault();
     console.log("the formdata is", formData);
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
-      const data = response.data;
-      if (response.status == 200) {
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     withCredentials: true,
+      //   }
+      // );
+      const data = await skillSyncApi.loginApi(formData);
+      if (data.status == 200) {
         console.log("data", data);
-        toast.success(data.message);
-        localStorage.setItem("auth_token", data.token);
-        localStorage.setItem("user", data.user);
+        toast.success(data.data.message);
         setIsLoading(false);
+        navigate.push('/skills')
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("user", data.user);       
         setFormData({
           username_or_email: "",
           password: "",
         });
-        navigate.push('/skills')
+        
       } else {
         toast.error(data.message);
         setIsLoading(false);

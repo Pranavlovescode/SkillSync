@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { skillsApi } from "@/lib/api";
+import { skillsApi, skillSyncApi } from "@/lib/api";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function AddSkillPage() {
+
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
+    post_name: "",
     level: "Beginner",
-    category_id: "",
-    description: "",
+    post_tags: "",
+    post_description: "",
   });
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +56,10 @@ export default function AddSkillPage() {
 
     try {
       // In a real app, you would call the API to add the skill
-      // await skillsApi.addSkill(formData);
+      console.log(formData)
+      const data = await skillSyncApi.addSkill(formData);
+      console.log("data", data);
+      toast.success("Skill added successfully!");
 
       // For now, we'll just simulate a successful API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -94,8 +99,8 @@ export default function AddSkillPage() {
             <input
               type="text"
               id="name"
-              name="name"
-              value={formData.name}
+              name="post_name"
+              value={formData.post_name}
               onChange={handleChange}
               required
               className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -134,8 +139,8 @@ export default function AddSkillPage() {
             </label>
             <select
               id="category_id"
-              name="category_id"
-              value={formData.category_id}
+              name="post_tags"
+              value={formData.post_tags}
               onChange={handleChange}
               required
               className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -158,8 +163,8 @@ export default function AddSkillPage() {
             </label>
             <textarea
               id="description"
-              name="description"
-              value={formData.description}
+              name="post_description"
+              value={formData.post_description}
               onChange={handleChange}
               rows="4"
               className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"

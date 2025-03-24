@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { skillsApi } from '@/lib/api';
+import { skillSyncApi } from '@/lib/api';
 import { Suspense } from 'react';
 
 // Fallback loading component
@@ -113,7 +113,7 @@ function SkillsContent() {
         setIsLoading(true);
         // In a real app, you would fetch categories and their skills
         // For now, we'll use mock data until the API is ready
-        const categoriesData = await skillsApi.getCategories();
+        const categoriesData = await skillSyncApi.getCategories();
         setCategories(categoriesData);
         setFilteredCategories(categoriesData);
       } catch (err) {
