@@ -9,6 +9,7 @@ from .serializers import (
     SkillCategorySerializer, SkillSerializer, 
     SkillEndorsementSerializer, SkillCategoryWithSkillsSerializer
 )
+from rest_framework.authentication import SessionAuthentication,BaseAuthentication
 
 # Traditional view functions
 from django.shortcuts import render, redirect
@@ -267,6 +268,85 @@ def create_new_post(request):
         'pageTitle': 'Create New Post',
         'isAuthenticated': True
     })
+
+@api_view(['POST'])
+def create_new_skills(request):
+    """
+    View for creating a new skill post with JSON responses
+    """
+    user_email = request.session.get('user')
+    if not user_email:
+        return JsonResponse({
+            'success': False,
+            'error': 'Not authenticated',
+            'redirect': '/'
+        }, status=401)
+    
+    user = User.objects.get(email=user_email)
+    
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            post_name = data.get('post_name')
+            post_description = data.get('post_description')
+            post_level = data.get('post_level', 'Beginner')  # Default to 'Beginner' if not provided
+            category_id = request.GET.get('category_id')
+            
+            # Validate required fields
+            if not all([post_name, post_description]):
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Post name and description are required'
+                }, status=400)
+                
+            # Validate level field
+            if not post_level or post_level not in [choice[0] for choice in Skill.LEVEL_CHOICES]:
+                post_level = 'Beginner'  # Default to Beginner if invalid
+            
+            # Validate category exists
+            if not category_id:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Category is required'
+                }, status=400)
+                
+            try:
+                category = SkillCategory.objects.get(id=category_id)
+            except SkillCategory.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid category'
+                }, status=400)
+            
+            post = Skill(
+                name=post_name,
+                description=post_description,
+                level=post_level,
+                category=category,
+                user=user
+            )
+            
+            post.save()
+            serializer = SkillSerializer(post)
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Skill created successfully',
+                'post': serializer.data,
+                'redirect': '/skill/'
+            }, status=201)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=400)
+    
+    # For GET requests, return form initial state
+    return JsonResponse({
+        'pageTitle': 'Create New Post',
+        'isAuthenticated': True
+    })
+
 
 # Skill Category ViewSet
 class SkillCategoryViewSet(viewsets.ModelViewSet):
