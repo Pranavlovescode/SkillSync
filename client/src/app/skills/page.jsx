@@ -114,6 +114,7 @@ function SkillsContent() {
         // In a real app, you would fetch categories and their skills
         // For now, we'll use mock data until the API is ready
         const categoriesData = await skillSyncApi.getCategories();
+        console.log("Fetched categories data:", categoriesData);
         setCategories(categoriesData);
         setFilteredCategories(categoriesData);
       } catch (err) {

@@ -12,20 +12,20 @@ const api = axios.create({
 });
 
 // Add request interceptor to include auth token
-api.interceptors.request.use(
-  (config) => {
-    // Get token from localStorage if available
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+// api.interceptors.request.use(
+//   (config) => {
+//     // Get token from localStorage if available
+//     const token =
+//       typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-    if (token) {
-      config.headers["Authorization"] = `Token ${token}`;
-    }
+//     if (token) {
+//       config.headers["Authorization"] = `Token ${token}`;
+//     }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
 
 // Skills API endpoints
 export const skillSyncApi = {
@@ -92,7 +92,12 @@ export const skillSyncApi = {
   // Get skill categories
   getCategories: async () => {
     try {
-      const response = await api.get("/api/skill-categories/");
+      const response = await api.get("/skill/skills-category/",{
+        withCredentials:true,
+        headers:{
+          'Content-Type':'application/json',
+        }
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching skill categories:", error);

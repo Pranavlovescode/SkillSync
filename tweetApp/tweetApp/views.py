@@ -57,7 +57,7 @@ def login_api(request):
     
     if django_user:
         # Get or create token
-        token, created = Token.objects.get_or_create(user=django_user)
+        # token, created = Token.objects.get_or_create(user=django_user)
         
         # Get or create custom user
         try:
@@ -70,13 +70,13 @@ def login_api(request):
             )
         
         # Store in session
-        request.session['auth_token'] = token.key
+        # request.session['auth_token'] = token.key
         request.session['user'] = custom_user.email
         
         serializer = UserSerializer(custom_user)
         return Response({
             'message': 'Login successful',
-            'token': token.key,
+            # 'token': token.key,
             'user': serializer.data
         }, status=status.HTTP_200_OK)
     else:
