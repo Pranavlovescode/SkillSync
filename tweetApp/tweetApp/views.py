@@ -150,29 +150,35 @@ def signup_api(request):
         'user': serializer.data
     }, status=status.HTTP_201_CREATED)
 
-@api_view(['POST'])
+@api_view(['POST','GET'])
 @permission_classes([AllowAny])
 def logout_api(request):
     """
     API endpoint for user logout
     """
     try:
-        # Get the token from either the Authorization header or session
-        auth_header = request.META.get('HTTP_AUTHORIZATION', '')
-        token_key = None
+        # # Get the token from either the Authorization header or session
+        # auth_header = request.META.get('HTTP_AUTHORIZATION', '')
+        # token_key = None
         
-        if auth_header.startswith('Token '):
-            token_key = auth_header.split(' ')[1]
-        else:
-            token_key = request.session.get('auth_token')
+        # if auth_header.startswith('Token '):
+        #     token_key = auth_header.split(' ')[1]
+        # else:
+        #     token_key = request.session.get('auth_token')
         
-        if token_key:
-            try:
-                # Delete the token
-                token = Token.objects.get(key=token_key)
-                token.delete()
-            except Token.DoesNotExist:
-                pass  # Token might already be deleted
+        # if token_key:
+        #     try:
+        #         # Delete the token
+        #         token = Token.objects.get(key=token_key)
+        #         token.delete()
+        #     except Token.DoesNotExist:
+        #         pass  # Token might already be deleted
+        user_email = request.session.get('user')
+        if not user_email:
+            return Response(
+                {'message': 'User not logged in'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Clear session
         request.session.flush()

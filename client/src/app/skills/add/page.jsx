@@ -25,13 +25,16 @@ export default function AddSkillPage() {
       try {
         // In a real app, you would fetch categories from the API
         // For now, we'll use mock data
+        const reponse = await skillSyncApi.getCategories();
+        const data = await reponse;
+        console.log("get categories", data)
         const mockCategories = [
           { id: 1, name: "Programming Languages" },
           { id: 2, name: "Web Development" },
           { id: 3, name: "Data Science" },
           { id: 4, name: "Design" },
         ];
-        setCategories(mockCategories);
+        setCategories(data);
       } catch (err) {
         console.error("Error fetching categories:", err);
         setError("Failed to load categories. Please try again later.");

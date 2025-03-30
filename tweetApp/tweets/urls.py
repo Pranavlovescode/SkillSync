@@ -16,7 +16,7 @@ urlpatterns = [
     path('post/', views.create_new_post, name='skill_post'),
     path("skills-post/", views.create_new_skills, name="create_new_skills"),
     path("skills-category/", views.add_category, name="create_new_category"),
-    
+    path("get-skills-by-category/<str:category_id>/", views.get_skill_by_category, name="get_skills_by_category"),
     # API endpoints
     path('api/', include(router.urls)),
 ]

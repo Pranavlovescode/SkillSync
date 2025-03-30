@@ -59,7 +59,7 @@ export const skillSyncApi = {
   // Get skills by category
   getSkillsByCategory: async (categoryId) => {
     try {
-      const response = await api.get(`/api/skills/category/${categoryId}/`);
+      const response = await api.get(`/skill/get-skills-by-category/${categoryId}/`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching skills for category ${categoryId}:`, error);
@@ -70,7 +70,7 @@ export const skillSyncApi = {
   // Add a new skill
   addSkill: async (skillData) => {
     try {
-      const response = await api.post("/skill/post/", skillData);
+      const response = await api.post("/skill/skills-post/", skillData);
       return response.data;
     } catch (error) {
       console.error("Error adding skill:", error);
@@ -125,7 +125,7 @@ export const authApi = {
     try {
       const response = await api.post("/api/logout/");
       localStorage.removeItem("token");
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Logout error:", error);
       // Still remove token even if API call fails

@@ -190,7 +190,7 @@ def create_new_skills(request):
             post_name = data.get('post_name')
             post_description = data.get('post_description')
             post_level = data.get('post_level', 'Beginner')  # Default to 'Beginner' if not provided
-            category_id = request.GET.get('category_id')
+            post_tags = data.get('post_tags')
             
             # Validate required fields
             if not all([post_name, post_description]):
@@ -204,14 +204,14 @@ def create_new_skills(request):
                 post_level = 'Beginner'  # Default to Beginner if invalid
             
             # Validate category exists
-            if not category_id:
+            if not post_tags:
                 return JsonResponse({
                     'success': False,
                     'error': 'Category is required'
                 }, status=400)
                 
             try:
-                category = SkillCategory.objects.get(id=category_id)
+                category = SkillCategory.objects.get(id=post_tags)
             except SkillCategory.DoesNotExist:
                 return JsonResponse({
                     'success': False,
@@ -302,3 +302,30 @@ def add_category(request):
         serializer = SkillCategorySerializer(categories, many=True)
         return Response(serializer.data)
     return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+@api_view(['GET'])
+def get_skill_by_category(request,category_id):
+    """
+    Get all skills for a specific category
+    """
+    user_email = request.session.get('user')
+    if not category_id:
+        return JsonResponse({
+            'success': False,
+            'error': 'Category ID is required',
+            'redirect': '/'
+        }, status=400)
+    if not user_email:
+        return JsonResponse({
+            'success': False,
+            'error': 'Not authenticated',
+            'redirect': '/'
+        }, status=401)
+    try:
+        category = SkillCategory.objects.get(id=category_id)
+        skills = Skill.objects.filter(category=category)
+        serializer = SkillSerializer(skills, many=True)
+        return Response(serializer.data)
+    except SkillCategory.DoesNotExist:
+        return Response({"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND)

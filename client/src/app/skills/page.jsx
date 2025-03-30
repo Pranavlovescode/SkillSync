@@ -72,6 +72,9 @@ const SkillCard = ({ skill, onEndorse }) => {
 
 // Category Section Component
 const CategorySection = ({ category, isExpanded, toggleExpand, onEndorse }) => {
+  // Check if category has skills before rendering
+  const hasSkills = Array.isArray(category.skills) && category.skills.length > 0;
+  
   return (
     <div className="mb-8">
       <div 
@@ -79,20 +82,31 @@ const CategorySection = ({ category, isExpanded, toggleExpand, onEndorse }) => {
         onClick={() => toggleExpand(category.id)}
       >
         <h2 className="text-xl font-bold text-gray-800">{category.name}</h2>
-        <button className="text-blue-600 hover:text-blue-800">
-          {isExpanded ? "Show Less" : "Show All"}
-        </button>
+        {hasSkills && (
+          <button className="text-blue-600 hover:text-blue-800">
+            {isExpanded ? "Show Less" : "Show All"}
+          </button>
+        )}
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {category.skills.slice(0, isExpanded ? category.skills.length : 3).map(skill => (
-          <SkillCard 
-            key={skill.id} 
-            skill={skill} 
-            onEndorse={onEndorse}
-          />
-        ))}
-      </div>
+      {hasSkills ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {category.skills.slice(0, isExpanded ? category.skills.length : 3).map(skill => (
+            <SkillCard 
+              key={skill.id} 
+              skill={skill} 
+              onEndorse={onEndorse}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-gray-50 rounded-lg p-6 text-center">
+          <p className="text-gray-500">No skills found in this category.</p>
+          <Link href="/skills/add" className="mt-2 inline-block text-blue-600 hover:text-blue-800">
+            Add a skill
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
@@ -115,8 +129,58 @@ function SkillsContent() {
         // For now, we'll use mock data until the API is ready
         const categoriesData = await skillSyncApi.getCategories();
         console.log("Fetched categories data:", categoriesData);
-        setCategories(categoriesData);
-        setFilteredCategories(categoriesData);
+        // Fallback to mock data for development
+        const mockData = [
+          {
+            id: 1,
+            name: "Programming Languages",
+            skills: [
+              { id: 1, name: "JavaScript", endorsements: 42, level: "Advanced" },
+              { id: 2, name: "Python", endorsements: 38, level: "Advanced" },
+              { id: 3, name: "Java", endorsements: 27, level: "Intermediate" },
+              { id: 4, name: "C++", endorsements: 19, level: "Intermediate" },
+              { id: 5, name: "TypeScript", endorsements: 31, level: "Advanced" },
+            ]
+          },
+          {
+            id: 2,
+            name: "Web Development",
+            skills: [
+              { id: 6, name: "React", endorsements: 45, level: "Expert" },
+              { id: 7, name: "Next.js", endorsements: 36, level: "Advanced" },
+              { id: 8, name: "Node.js", endorsements: 33, level: "Advanced" },
+              { id: 9, name: "HTML/CSS", endorsements: 40, level: "Expert" },
+              { id: 10, name: "Django", endorsements: 25, level: "Intermediate" },
+            ]
+          },
+          {
+            id: 3,
+            name: "Data Science",
+            skills: [
+              { id: 11, name: "Machine Learning", endorsements: 22, level: "Intermediate" },
+              { id: 12, name: "Data Analysis", endorsements: 29, level: "Advanced" },
+              { id: 13, name: "SQL", endorsements: 35, level: "Advanced" },
+              { id: 14, name: "Pandas", endorsements: 27, level: "Advanced" },
+              { id: 15, name: "TensorFlow", endorsements: 18, level: "Intermediate" },
+            ]
+          },
+          {
+            id: 4,
+            name: "Design",
+            skills: [
+              { id: 16, name: "UI/UX Design", endorsements: 31, level: "Advanced" },
+              { id: 17, name: "Figma", endorsements: 28, level: "Advanced" },
+              { id: 18, name: "Adobe Photoshop", endorsements: 24, level: "Intermediate" },
+              { id: 19, name: "Responsive Design", endorsements: 33, level: "Advanced" },
+              { id: 20, name: "Wireframing", endorsements: 26, level: "Intermediate" },
+            ]
+          }
+        ];
+        
+        setCategories(mockData);
+        setFilteredCategories(mockData);
+        // setCategories(categoriesData);
+        // setFilteredCategories(categoriesData);
       } catch (err) {
         console.error("Error fetching skills data:", err);
         setError("Failed to load skills. Please try again later.");
