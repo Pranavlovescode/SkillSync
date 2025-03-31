@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -10,11 +11,24 @@ from tweets.serializers import UserSerializer
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+import json,os
 from django.contrib.auth.models import User as DjangoUser
 import logging
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
+
+
+
+cloudinary.config(
+    cloud_name = os.getenv("CLOUD_NAME"),
+    api_key = os.getenv("CLOUD_API_KEY"),
+    api_secret = os.getenv("CLOUD_API_SECRET")
+)
+
 
 @api_view(['POST', 'GET'])
 @permission_classes([AllowAny])
@@ -118,23 +132,52 @@ def signup_api(request):
         )
     
     # Create Django User first (this is the primary user for authentication)
+    # Define a default profile image relative to your media directory
+
+    # Upload default profile image
+# Upload default profile image
+    # try:
+    #     image_path = os.path.join('media', 'user.jpg')  
+    #     cloudinary_response = cloudinary.uploader.upload(
+    #         image_path, 
+    #         folder='SkillSync/profile_photo',
+    #         resource_type='image'
+    #     )
+    #     profile_photo_url = cloudinary_response.get('secure_url')
+    # except Exception as e:
+    #     print(f"Cloudinary upload error: {str(e)}")
+    #     profile_photo_url = None  # Use None if upload fails
+
+    # Upload the default image to Cloudinary
+    # image_path = os.path.join('media', 'user.jpg')
+    # upload_result = cloudinary.uploader.upload(image_path, folder="SkillSync/profile_photo")
+
+    # Get the secure URL from Cloudinary response
+    # secure_url = upload_result.get("secure_url")
+    default_image_path = 'https://res.cloudinary.com/dwsjntvgq/image/upload/v1743408181/SkillSync/profile_photo/s4qbhsl5b1uqshpmyua1.jpg'
     django_user = DjangoUser.objects.create_user(
         username=username,
         email=email,
         password=password,  # This will be hashed by create_user
         first_name=first_name,
-        last_name=last_name
+        last_name=last_name,
+        
     )
+    
     
     # Create custom User with the same data
     hash_password = django_user.password  # Already hashed by Django
+    
+        
     custom_user = User.objects.create(
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
-        username=username,
-        password=hash_password
-    )
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            username=username,
+            password=hash_password,
+            profile_photo=default_image_path,  # Use the secure URL from Cloudinary
+        )
+    
     
     # Create token for the Django User
     token, created = Token.objects.get_or_create(user=django_user)
