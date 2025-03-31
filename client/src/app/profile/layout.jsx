@@ -37,7 +37,7 @@ export default function SkillsLayout({ children }) {
                 </Link>
               );
             })}
-
+            
           </nav>
           <Image src={'https://res.cloudinary.com/dwsjntvgq/image/upload/v1743408181/SkillSync/profile_photo/s4qbhsl5b1uqshpmyua1.jpg'} width={40} height={10} alt='user' className='rounded-full'/>
         </div>
